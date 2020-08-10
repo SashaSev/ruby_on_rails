@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_09_192257) do
+ActiveRecord::Schema.define(version: 2020_08_10_112337) do
 
   create_table "events", force: :cascade do |t|
     t.string "name"
@@ -25,12 +25,11 @@ ActiveRecord::Schema.define(version: 2020_08_09_192257) do
   end
 
   create_table "registrations", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
     t.string "how_heard"
     t.integer "event_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id"
     t.index ["event_id"], name: "index_registrations_on_event_id"
   end
 
@@ -40,6 +39,7 @@ ActiveRecord::Schema.define(version: 2020_08_09_192257) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "admin", default: false
   end
 
   add_foreign_key "registrations", "events"

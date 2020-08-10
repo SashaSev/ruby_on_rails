@@ -4,12 +4,6 @@
 <%= form_with(model: [@event, @registration], local: true) do |f| %>
   <%= render "shared/error", object: @registration %>
 
-  <%= f.label :name %>
-  <%= f.text_field :name %>
-
-  <%= f.label :email %>
-  <%= f.email_field :email %>
-
   <%= f.label :how_heard %>
   <%= f.select :how_heard, Registration::HOW_HEARD_OPTIONS, prompt: "Pick One" %>
 
