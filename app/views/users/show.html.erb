@@ -1,0 +1,11 @@
+<section class="user">
+  <%= @user.name %>
+  <%= mail_to(@user.email) %>
+  <div class="actions">
+    <%= link_to "Edit Account", edit_user_path(@user), class: "button" %>
+    <%= link_to "Delete Account", @user, method: :delete,
+                data: {confirm: "Are you sure?"},
+                class: "button, delete"
+    %>
+  </div>
+</section>
