@@ -8,10 +8,12 @@
     </ul>
     <ul class="right">
       <% if current_user %>
+        <%#= debug(current_user) %>
 
         <li>
           <%= link_to current_user.name, current_user %>
         </li>
+        <%= link_to "SignOut", session_path(current_user.id), method: :delete, class: "button" %>
       <% else %>
 
         <li>
