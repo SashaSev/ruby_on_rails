@@ -10,17 +10,27 @@
       %>
     <% end %>
     <h3>Registrations</h3>
-    <% @registrations.each do |r| %>
-      <div class="registration">
-        <div class="image">
-          <%= link_to image_tag(r.event.image_file), r.event %>
+    <% if @registrations.present? %>
+      <% @registrations.each do |r| %>
+        <div class="registration">
+          <div class="image">
+            <%= link_to image_tag(r.event.image_file), r.event %>
+          </div>
+          <div class="name">
+            <%= link_to r.event.name, r.event %>
+          </div>
+          <div class="date">
+            <%= time_ago_in_words(r.created_at) %>
+          </div>
         </div>
-        <div class="name">
-          <%= link_to r.event.name, r.event %>
-        </div>
-        <div class="date">
-          <%= time_ago_in_words(r.created_at) %>
-        </div>
+      <% end %>
+    <% end %>
+    <% if @likes_events.present? %>
+    <h3>Liked Events</h3>
+      <div class="liked-events">
+        <% @likes_events.each do |r| %>
+          <%= link_to image_tag(event.image_file), event %>
+        <% end %>
       </div>
     <% end %>
   </div>
