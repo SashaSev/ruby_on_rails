@@ -6,27 +6,33 @@ class Event < ApplicationRecord
   #   super
   # end
   #
+  before_save :set_slug
 
   has_many :registrations, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :likers, through: :likes, source: :user
 
-  validates :name, :location, presence: true
+  has_many :categorizations, dependent: :destroy
+  has_many :categories, through: :categorizations
 
-  validates :description, length: { minimum: 25 }
+  validates :name, presence: true, uniqueness: true
+  validates :location, presence: true
 
-  validates :price, numericality: { greater_than_or_equal_to: 0 }
+  validates :description, length: {minimum: 25}
 
-  validates :capacity, numericality: { only_integer: true, greater_than: 0 }
+  validates :price, numericality: {greater_than_or_equal_to: 0}
+
+  validates :capacity, numericality: {only_integer: true, greater_than: 0}
 
   validates :image_file, format: {
-    with: /\w+\.(jpg|png)\z/i,
-    message: 'must make JPG or PNG'
+      with: /\w+\.(jpg|png)\z/i,
+      message: 'must make JPG or PNG'
   }
 
-  def self.upcoming
-    where('starts_at > ?', Time.now).order(starts_at: :asc)
-  end
+  scope :past, -> { where('starts_at < ?', Time.now).order(starts_at: :asc) }
+  scope :upcoming, -> { where('starts_at > ?', Time.now).order(starts_at: :asc) }
+  scope :free, -> { upcoming.where(price: 0.0).order(:name) }
+  scope :recent, ->(max = 3) { past.limit(max) }
 
   def free?
     price.blank? || price.zero?
@@ -34,6 +40,14 @@ class Event < ApplicationRecord
 
   def sold_out?
     (capacity - registrations.size).zero?
+  end
+
+  def to_param
+    slug
+  end
+
+  def set_slug
+    self.slug = name.parameterize
   end
 
 end
